@@ -1,120 +1,96 @@
 # API FinnCtrlPro
 
-Uma API RESTful construída com **TypeScript**, **Fastify**, **Prisma**, e documentação automatizada com **Swagger**.  
-Padrões de código garantidos com **ESLint + Prettier**.
+API do melhor sistema de controle financeiro pessoal.
 
-## Stack
+![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
+![PostgreSQL](https://img.shields.io/badge/postgresql-%3E%3D14-blue)
 
-- **Backend:** TypeScript + Fastify
-- **ORM:** Prisma
-- **Documentação:** Swagger/OpenAPI
-- **Lint/Format:** ESLint + Prettier
-- **Banco de dados:** PostgreSQL (configurável via `.env`)
-- **Autenticação:** JWT (opcional)
-- **Teste:** Jest + Supertest (opcional)
+## Requisitos
 
-## Pré-requisitos
+- [NodeJS](https://nodejs.org)
+- [PostgreSQL](https://www.postgresql.org)
 
-- Node.js >= 22
-- pnpm
-- PostgreSQL (ou outro banco suportado pelo Prisma)
+## Funcionalidades
+
+- Registro de entradas e saídas
+- Classificação de transações
+- Acompanhamento de saldo e fluxo de caixa
 
 ## Instalação
 
-Clone o repositório:
-
-```bash
-git clone <link-do-repositorio> api
-cd api
+```sh
+git clone <link-do-repo> api
+cd api/
+pnpm i
 ```
 
-Instale dependências:
+> _Troque o `pnpm` pelo gerenciador de pacotes que preferir._
 
-```bash
-pnpm install
-```
+## Configuração
 
-Configure o banco de dados no arquivo `.env`:
+Copie as variáveis de ambiente do [`.env.example`](./.env.example) para um arquivo `.env` na raiz do projeto e configure-as.
 
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
-JWT_SECRET="sua_chave_secreta"
-```
+As variáveis obrigatórias são:
 
-## Inicialização
+- `JWT_SECRET`
+- `DATABASE_URL`
 
-### Rodando a API
+## Uso
 
-```bash
+```sh
+# Rodar o servidor
 pnpm dev
+
+# Testar rota de saúde
+curl http://localhost:3000/health
 ```
 
-A API estará disponível em: `http://localhost:3000`
+## Documentação
 
-### Rodando migrações do Prisma
-
-```bash
-pnpm prisma migrate dev --name init
-```
-
-### Abrindo o Prisma Studio
-
-```bash
-pnpm prisma studio
-```
-
-## Documentação da API
-
-A documentação Swagger é gerada automaticamente pelo Fastify e está disponível em:
+A documentação Swagger está disponível em:
 
 ```
-http://localhost:3030/docs
-```
-
-## Lint e Formatação
-
-O projeto segue padrões de código com **ESLint + Prettier**.
-Variáveis ou parâmetros iniciados com `_` não geram warning de “não usado”.
-
-### Rodando lint
-
-```bash
-pnpm lint
-```
-
-### Corrigindo problemas automaticamente
-
-```bash
-pnpm lint --fix
-pnpm format
+http://localhost:3000/docs
 ```
 
 ## Estrutura do Projeto
 
-```
+```sh
 api/
-├─ src/
-│  ├─ core/         # Rotas, controllers, middlewares
-│  ├─ main.ts       # Ponto de entrada
-│  ├─ server.ts     # Configuração do Fastify
-│  ├─ utils/        # Helpers, erros customizados, plugins
-│  ├─ modules/      # Modulos da aplicação
-├─ prisma/          # Prisma schema e migrações
-├─ eslint.config.cjs
-├─ .prettierrc
-├─ tsconfig.json
-├─ package.json
-└─ README.md
++---.vscode/
+|       settings.json   # Configurações do VSCode
++---prisma/
+|       schema.prisma   # Esquema do banco de dados
+\---src/
+    |   main.ts         # Inicialização do projeto
+    |   server.ts       # Servidores
+    +---core/           # Arquivos centrais
+    |       routes.ts   # Registrador de rotas HTTP
+    +---modules/        # Módulos da aplicação
+    +---tests/          # Arquivos de testes
+    \---utils/
+        +---errors/     # Normalizador de erros
+        |       HttpBaseError.ts
+        \---plugins/    # Plugins para o Fastify
+                auth.ts
+                cors.ts
+                index.ts
+                jwt.ts
+                swagger.ts
 ```
 
-## Segurança
+## Testes
 
-- JWT para autenticação de rotas privadas.
+> _Ainda não tem, mas em breve irei adicionar_
 
-## Links Úteis
+```sh
+pnpm test
+```
 
-- [Prisma Docs](https://www.prisma.io/docs/)
-- [Fastify Docs](https://www.fastify.io/docs/latest/)
-- [ESLint Docs](https://eslint.org/docs/latest/)
-- [Prettier Docs](https://prettier.io/docs/en/)
-- [Swagger/OpenAPI](https://swagger.io/specification/)
+## Contribuição
+
+Sinta-se à vontade para abrir issues ou pull requests seguindo os padrões do projeto.
+
+---
+
+With 🤍 by [**Ahosall**](https://github.com/Ahosall)

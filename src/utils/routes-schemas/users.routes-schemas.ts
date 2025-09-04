@@ -51,7 +51,7 @@ export const LoginUserSchema = {
     200: {
       type: "object",
       properties: {
-        message: { type: "string", default: "authentication success" },
+        token: { type: "string" },
         user: {
           type: "object",
           properties: {

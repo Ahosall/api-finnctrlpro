@@ -23,7 +23,7 @@ export class LoginUserUseCase {
       throw new UnauthorizedError("password incorrect");
     }
 
-    const iat = Date.now() / 1000;
+    const iat = Math.floor(Date.now() / 1000);
     const token = this.jwt.sign({
       sub: user.id,
       exp: iat + 18_000,

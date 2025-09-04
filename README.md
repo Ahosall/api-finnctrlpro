@@ -40,9 +40,6 @@ As variáveis obrigatórias são:
 ```sh
 # Rodar o servidor
 pnpm dev
-
-# Testar rota de saúde
-curl http://localhost:3000/health
 ```
 
 ## Documentação

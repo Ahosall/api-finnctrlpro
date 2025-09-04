@@ -6,3 +6,132 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(255)
+  email        String    @unique @db.VarChar(255)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  role         RoleType
+  birthDate    DateTime? @map("birth_date")
+  phone        String?   @db.VarChar(13)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  accounts      Account[]      @relation(name: "UserAccounts")
+  categories    Category[]     @relation(name: "UserCategories")
+  transactions  Transaction[]  @relation(name: "UserTransactions")
+  notifications Notification[] @relation(name: "UserNotifications")
+  goals         Goal[]         @relation(name: "UserGoals")
+
+  @@map("users")
+}
+
+enum RoleType {
+  PERSONAL
+  BUSINESS
+
+  @@map("role_type")
+}
+
+model Account {
+  id        Int         @id @default(autoincrement())
+  userId    Int         @map("user_id")
+  user      User        @relation(name: "UserAccounts", references: [id], fields: [userId])
+  name      String      @db.VarChar(255)
+  type      AccountType
+  balance   Decimal     @default(0.0)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  transactions Transaction[] @relation(name: "AccountTransactions")
+
+  @@map("accounts")
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+  CREDIT
+  CASH
+
+  @@map("account_type")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  user      User     @relation(name: "UserCategories", references: [id], fields: [userId])
+  name      String   @db.VarChar(125)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  transactions Transaction[] @relation(name: "CategoryTransactions")
+
+  @@map("categories")
+}
+
+model Transaction {
+  id          Int             @id @default(autoincrement())
+  userId      Int             @map("user_id")
+  user        User            @relation(name: "UserTransactions", references: [id], fields: [userId])
+  accountId   Int             @map("account_id")
+  account     Account         @relation(name: "AccountTransactions", references: [id], fields: [accountId])
+  categoryId  Int             @map("category_id")
+  category    Category        @relation(name: "CategoryTransactions", references: [id], fields: [categoryId])
+  amount      Decimal         @default(0.0)
+  type        TransactionType
+  description String          @db.Text
+  date        DateTime
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  @@map("transactions")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+
+  @@map("transaction_type")
+}
+
+model Goal {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  user      User      @relation(name: "UserGoals", references: [id], fields: [userId])
+  name      String    @db.VarChar(255)
+  type      GoalType
+  target    Decimal
+  current   Decimal
+  deadline  DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@map("goals")
+}
+
+enum GoalType {
+  SAVING
+  BUDGET
+
+  @@map("goal_type")
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int              @map("user_id")
+  user      User             @relation(name: "UserNotifications", references: [id], fields: [userId])
+  message   String           @db.Text
+  type      NotificationType
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  LIMIT
+  DUE_DATE
+  OUTLIER
+
+  @@map("notification_type")
+}

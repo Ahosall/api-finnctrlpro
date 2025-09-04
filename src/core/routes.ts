@@ -1,3 +1,9 @@
 import { FastifyInstance } from "fastify";
 
-export const registerRoutes = (_instance: FastifyInstance) => {};
+import { authUsersRoutes } from "@/modules/users/interface/http/routes/auth.routes";
+import { profileUsersRoutes } from "@/modules/users/interface/http/routes/profile.routes";
+
+export const registerRoutes = (instance: FastifyInstance) => {
+  instance.register(authUsersRoutes, { prefix: "/auth" });
+  instance.register(profileUsersRoutes, { prefix: "/profile" });
+};

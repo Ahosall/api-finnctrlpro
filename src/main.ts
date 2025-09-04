@@ -7,7 +7,6 @@ import { HttpBaseError } from "./utils/errors/HttpBaseError";
 
 import { registerPlugins } from "./utils/plugins";
 import { registerRoutes } from "./core/routes";
-
 import { httpServer } from "./server";
 
 const instance = Fastify();
